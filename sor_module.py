@@ -3,6 +3,8 @@
 
     Source: https://stackoverflow.com/questions/55515627/pysimplegui-call-a-function-when-pressing-button
             https://thispointer.com/python-how-to-unzip-a-file-extract-single-multiple-or-all-files-from-a-zip-archive/#:~:text=To%20unzip%20it%20first%20create,()%20on%20that%20object%20i.e.&text=It%20will%20extract%20all%20the%20files%20in%20zip%20at%20current%20Directory.
+            https://github.com/PySimpleGUI/PySimpleGUI/issues/2722
+
     check_if_is_sorrv4_folder() - everytime when the program is launched
     check_all_sorr4_files() - everytime when the program is launched
     make_backup() - first time
@@ -187,9 +189,7 @@ def list_char_mods():
         if os.path.isdir(chars_dir + '\\' + mods.name):
             char_mods_dirs.append(mods.name)
         else:
-            for compressed_suffix in ['.zip', '.rar', '.7z', '.001']:
-                if mods.name.__contains__(compressed_suffix):
-                    files_to_uncompress.append(mods.name)
+            pass
 
     # 2 - Making the adjustments in the char_dirs_mods, looking if they are folders with real mod files
     # (If contains 1 file at least, will be added to list_chars)
@@ -199,3 +199,26 @@ def list_char_mods():
                 list_chars.append(char_mods_dir.name)
 
     return list_chars
+
+
+def uncompress_files(read_dir):
+    """
+        This function will uncompress all files in a directory. It will run before the function list_char_mods()
+    :param read_dir: Directory that may contains compressed files
+    :return:
+    """
+    from zipfile import ZipFile
+
+    files_to_uncompress = []  # Will store the files that are compressed
+    for mods in os.scandir(read_dir):
+        if ~os.path.isdir(read_dir + '\\' + mods.name):
+            for compressed_suffix in ['.zip', '.rar', '.7z', '.001']:
+                if mods.name.__contains__(compressed_suffix):
+                    files_to_uncompress.append(mods.name)
+        else:
+            pass
+
+    # Extracting all files to its current dir
+    for files in files_to_uncompress:
+        with ZipFile(read_dir + '\\' + files) as zipObj:
+            zipObj.extractall(read_dir + '\\' + files.split('.')[0])

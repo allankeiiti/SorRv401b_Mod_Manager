@@ -12,7 +12,7 @@ layout = [
           [sg.SimpleButton('Play Music'), sg.Text('\n\n\n\n\n')],
           [sg.Text('Char Mods', size=(15, 1)), sg.InputText('name')],
           [sg.Text('E', size=(15, 1)), sg.InputText('address')],
-          [sg.Text('Phone', size=(15, 1)), sg.InputText('phone')],,
+          [sg.Text('Phone', size=(15, 1)), sg.InputText('phone')],
           # [sg.Image(data=r'img\figure1.png')],
           [sg.SimpleButton('Char \nMods'), sg.SimpleButton('Enemy \nMods'), sg.SimpleButton('Stage \nMods'),
            sg.SimpleButton('Palettes'), sg.SimpleButton('Credits')]
