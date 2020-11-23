@@ -5,12 +5,13 @@
             https://thispointer.com/python-how-to-unzip-a-file-extract-single-multiple-or-all-files-from-a-zip-archive/#:~:text=To%20unzip%20it%20first%20create,()%20on%20that%20object%20i.e.&text=It%20will%20extract%20all%20the%20files%20in%20zip%20at%20current%20Directory.
             https://github.com/PySimpleGUI/PySimpleGUI/issues/2722
 
+    Rules of Execution
     check_if_is_sorrv4_folder() - everytime when the program is launched
     check_all_sorr4_files() - everytime when the program is launched
     make_backup() - first time
     check_if_folders_exist() - first time
     create_mods_folders() - first time
-    play_music()
+    play_music() - It May be out of the final project
 """
 import shutil
 import subprocess
@@ -105,8 +106,6 @@ def check_all_sorr4_files():
 def make_backup():
     """
         this function'll be executed once at the start. It'll check if the backup folder exists
-        TODO: Remember that not all players doesn't have the vanilla data folder, what about thinking in download
-                the files and moving there?
     :return:
     """
     backup_dir = r'Sor_Mods_Storage\backup_folder'
@@ -159,15 +158,14 @@ def create_mods_folders():
 
 
 def play_music():
+    """
+        Function to play music during the tool use
+        Credits: Yuzo Koshiro
+    """
     from pygame import mixer
-    """ Function used to play music during the tool use, but maybe gonna be scrapped """
     mixer.init()
     mixer.music.load('bg_music.mp3')
     mixer.music.play()
-
-
-def test_function(mode):
-    print(f'Essa Função foi executada! {mode}')
 
 
 def list_char_mods():
@@ -181,7 +179,6 @@ def list_char_mods():
     """
     list_chars = []  # Will store a Final char list as output from the function
     char_mods_dirs = []  # Will store the char folders with respective files
-    files_to_uncompress = []  # Will store the files that are compressed
     chars_dir = r'Sor_Mods_Storage\chars'
 
     # 1 - Scanning the chars mod Folder
@@ -203,9 +200,10 @@ def list_char_mods():
 
 def uncompress_files(read_dir):
     """
-        This function will uncompress all files in a directory. It will run before the function list_char_mods()
-    :param read_dir: Directory that may contains compressed files
-    :return:
+        This function will uncompress all files in a directory. It will run before the function list_char_mods().
+        It means to uncompress all the mod content of a .Zip or .rar.
+    :param read_dir: Directory that may contains compressed files containing mods.
+    :return: None.
     """
     from zipfile import ZipFile
 
@@ -222,3 +220,28 @@ def uncompress_files(read_dir):
     for files in files_to_uncompress:
         with ZipFile(read_dir + '\\' + files) as zipObj:
             zipObj.extractall(read_dir + '\\' + files.split('.')[0])
+
+
+def apply_mod(mod_dir, mod, type):
+    """
+        This function will replace the data files with the ones in the mod list
+    :param mod_dir: Directory that contains the Mods to be applied.
+    :param mod: Directory of the respective Mod.
+    :param type: char, enemy category mod
+    :return: None.
+    """
+    mods = {}
+
+    # Listing all files from the selected Mod
+    for mod_folder in os.scandir(mod_dir):
+        if os.path.isdir(f'{mod_dir}\\{mod_folder.name}'):
+            print(mod_folder.name)
+            mod_files_list = []
+            for mod_files in os.scandir(f'{mod_dir}\\{mod_folder.name}'):
+                mod_files_list.append(mod_files.name)
+                mods.update({mod_folder.name: mod_files_list})
+
+    # Replacing the mod files to the data folder
+    for mod_files in mods[mod]:
+        shutil.move(f'Sor_Mods_Storage\\{type}\\{mod}\\{mod_files}', f'data\\{mod_files}')
+ # TODO criar um ambiente pra teste de gui com pyinstaller
