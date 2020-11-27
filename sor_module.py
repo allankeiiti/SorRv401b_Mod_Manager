@@ -177,7 +177,7 @@ def list_char_mods():
         If you put a compressed file, it'll uncompress!
     :return: List of mods
     """
-    list_chars = []  # Will store a Final char list as output from the function
+    dict_file_chars = {}  # Will store the char Mod folder name and respective files that are game files inside
     char_mods_dirs = []  # Will store the char folders with respective files
     chars_dir = r'Sor_Mods_Storage\chars'
 
@@ -191,11 +191,26 @@ def list_char_mods():
     # 2 - Making the adjustments in the char_dirs_mods, looking if they are folders with real mod files
     # (If contains 1 file at least, will be added to list_chars)
     for char_mods_dir in char_mods_dirs:
+        list_file_chars = []  # Will store a file list for each char Mod Folder located (if it contains mod files)
         for file in os.scandir(chars_dir + '\\' + char_mods_dir):
             if file.name in data:
-                list_chars.append(char_mods_dir.name)
+                list_file_chars.append(file.name)
+        dict_file_chars.update({char_mods_dir: list_file_chars})
 
-    return list_chars
+    # 3 - Considering only char mod folder that contains data files inside
+    keys_to_be_removed = []
+    for key, values in dict_file_chars.items():
+        # If the value stored in the key equals into a empty list, the key will be removed from the Python Dict
+        # Example:
+        # Axel folder doesnt got any data file inside, being "{'Axel': []}" and Maz otherwise, have data file inside,
+        # so "{'Maz': ['seaxel', 'axel']}", So the line below is listing all keys that are going to be removed.
+        if values == []:
+            keys_to_be_removed.append(key)
+
+    for key in keys_to_be_removed:
+        dict_file_chars.pop(key)
+
+    return dict_file_chars
 
 
 def uncompress_files(read_dir):
