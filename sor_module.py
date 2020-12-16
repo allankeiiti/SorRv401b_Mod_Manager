@@ -248,15 +248,18 @@ def apply_mod(mod_dir, mod, type):
     mods = {}
 
     # Listing all files from the selected Mod
-    for mod_folder in os.scandir(mod_dir):
-        if os.path.isdir(f'{mod_dir}\\{mod_folder.name}'):
-            print(mod_folder.name)
-            mod_files_list = []
-            for mod_files in os.scandir(f'{mod_dir}\\{mod_folder.name}'):
-                mod_files_list.append(mod_files.name)
-                mods.update({mod_folder.name: mod_files_list})
+    try:
+        for mod_folder in os.scandir(mod_dir):
+            if os.path.isdir(f'{mod_dir}\\{mod_folder.name}'):
+                mod_files_list = []
+                for mod_files in os.scandir(f'{mod_dir}\\{mod_folder.name}'):
+                    mod_files_list.append(mod_files.name)
+                    mods.update({mod_folder.name: mod_files_list})
 
-    # Replacing the mod files to the data folder
-    for mod_files in mods[mod]:
-        shutil.move(f'Sor_Mods_Storage\\{type}\\{mod}\\{mod_files}', f'data\\{mod_files}')
- # TODO criar um ambiente pra teste de gui com pyinstaller
+        # Replacing the mod files to the data folder
+        for mod_files in mods[mod]:
+            print(mod_files)
+            shutil.move(f'Sor_Mods_Storage\\{type}\\{mod}\\{mod_files}', f'data\\{mod_files}')
+            return True
+    except FileNotFoundError:
+        return False
