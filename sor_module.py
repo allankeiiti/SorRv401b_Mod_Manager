@@ -16,9 +16,10 @@
 import shutil
 import subprocess
 import os
+from pygame import mixer
 
 # Attr
-Mods_Cattegories = ['chars', 'enemies']
+Mods_Cattegories = ['chars', 'enemies', 'palletes', 'stages']
 
 Chars = ['Axel', 'Blaze', 'Skate', 'Adam', 'Max', 'Zan', 'Shiva', 'MrX']
 
@@ -105,10 +106,12 @@ def check_all_sorr4_files():
 
 def make_backup():
     """
-        this function'll be executed once at the start. It'll check if the backup folder exists
+        this function'll be executed once at the start. It'll check if the backup folder exists,
+        if not, it will create the 'master_backup_folder' inside 'Sor_Mods_Storage' on the root of
+        SorR4.01 directory containing all data FPG files inside.
     :return:
     """
-    backup_dir = r'Sor_Mods_Storage\backup_folder'
+    backup_dir = r'Sor_Mods_Storage\master_backup_folder'
     if ~os.path.exists(backup_dir):
         cmdCommand = fr"mkdir {backup_dir}"  # Copy data dir here
         subprocess.Popen(cmdCommand.split(), stdout=subprocess.PIPE, shell=True)
@@ -128,6 +131,7 @@ def check_if_folders_exist():
         Check if the Mods Folder exists in the game root directory
     :return: True / False
     """
+
     result = []
     result.append(os.path.exists('Sor_Mods_Storage'))
 
@@ -162,55 +166,54 @@ def play_music():
         Function to play music during the tool use
         Credits: Yuzo Koshiro
     """
-    from pygame import mixer
     mixer.init()
     mixer.music.load('bg_music.mp3')
     mixer.music.play()
 
 
-def list_char_mods():
+def list_char_mods(path_dir):
     """
         This function list all Characters Mods inside Sor_Mods_Storage\chars folder, and will be executed during the
         Char Mods window rendering.
         Is recommended to put the folder with the Mod Files, but I programmed it to find out if the folder is empty or
         have game files in it.
         If you put a compressed file, it'll uncompress!
+    :param path_dir: Path of the Mod Folder that'll be scanned.
     :return: List of mods
     """
-    dict_file_chars = {}  # Will store the char Mod folder name and respective files that are game files inside
-    char_mods_dirs = []  # Will store the char folders with respective files
-    chars_dir = r'Sor_Mods_Storage\chars'
+    dict_file_mods = {}  # Will store the char Mod folder name and respective files that are game files inside
+    mods_dirs = []  # Will store the char folders with respective files
 
     # 1 - Scanning the chars mod Folder
-    for mods in os.scandir(chars_dir):
-        if os.path.isdir(chars_dir + '\\' + mods.name):
-            char_mods_dirs.append(mods.name)
+    for mods in os.scandir(path_dir):
+        if os.path.isdir(path_dir + '\\' + mods.name):
+            mods_dirs.append(mods.name)
         else:
             pass
 
     # 2 - Making the adjustments in the char_dirs_mods, looking if they are folders with real mod files
     # (If contains 1 file at least, will be added to list_chars)
-    for char_mods_dir in char_mods_dirs:
+    for char_mods_dir in mods_dirs:
         list_file_chars = []  # Will store a file list for each char Mod Folder located (if it contains mod files)
-        for file in os.scandir(chars_dir + '\\' + char_mods_dir):
+        for file in os.scandir(path_dir + '\\' + char_mods_dir):
             if file.name in data:
                 list_file_chars.append(file.name)
-        dict_file_chars.update({char_mods_dir: list_file_chars})
+        dict_file_mods.update({char_mods_dir: list_file_chars})
 
     # 3 - Considering only char mod folder that contains data files inside
     keys_to_be_removed = []
-    for key, values in dict_file_chars.items():
+    for key, values in dict_file_mods.items():
         # If the value stored in the key equals into a empty list, the key will be removed from the Python Dict
         # Example:
         # Axel folder doesnt got any data file inside, being "{'Axel': []}" and Maz otherwise, have data file inside,
         # so "{'Maz': ['seaxel', 'axel']}", So the line below is listing all keys that are going to be removed.
-        if values == []:
+        if not values:
             keys_to_be_removed.append(key)
 
     for key in keys_to_be_removed:
-        dict_file_chars.pop(key)
+        dict_file_mods.pop(key)
 
-    return dict_file_chars
+    return dict_file_mods
 
 
 def uncompress_files(read_dir):
@@ -242,7 +245,8 @@ def apply_mod(mod_dir, mod, type):
         This function will replace the data files with the ones in the mod list
     :param mod_dir: Directory that contains the Mods to be applied.
     :param mod: Directory of the respective Mod.
-    :param type: char, enemy category mod
+    :param type: char, enemy category or stage mod
+                'chars', 'enemies', 'palletes' or 'stages' is allowed.
     :return: None.
     """
     mods = {}
