@@ -23,11 +23,12 @@ def chars_window():
         Function that represents the window which Character Mods can be applied.
     :return:
     """
-    char_mods_dict = sor_module.list_char_mods()
+    path_dir = r'Sor_Mods_Storage\chars'
+    char_mods_dict = sor_module.list_char_mods(path_dir=path_dir)
 
     # Loading Images to screen
     chars = tk.Toplevel()
-    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/Photo_PlaceHolder_Axel_By_Daniel2221.png'))
+    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/axel_daniel2221.png'))
     imgRandom_label = tk.Label(chars, image=mainTitleImg)
     title = tk.Label(chars, text="Characters Mods")
 
@@ -41,7 +42,7 @@ def chars_window():
         if char_selected == '':
             value = f'{value} Please Select an Mod to Apply!'
         else:
-            sor_module.apply_mod(f'Sor_Mods_Storage\chars', mod=char_selected, type='chars')
+            sor_module.apply_mod(mod_dir=path_dir, mod=char_selected, type='chars')
             value = f'Character Mod {char_selected} applied!'
 
         result_label = tk.Label(result_window, text=value)
@@ -60,11 +61,13 @@ def enemy_window():
         Function that represents the window which Enemy Mods can be applied.
     :return:
     """
-    enemy_mods_dict = sor_module.list_char_mods(path_dir=r'Sor_Mods_Storage\enemies')
+    path_dir = r'Sor_Mods_Storage\enemies'
+    enemy_mods_dict = sor_module.list_char_mods(path_dir=path_dir)
 
     # Loading Images to screen
     enemies = tk.Toplevel()
-    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/Photo_PlaceHolder_Axel_By_Daniel2221.png'))
+    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/axel_daniel2221.png'))
+
     imgRandom_label = tk.Label(enemies, image=mainTitleImg)
     title = tk.Label(enemies, text="Enemies Mods")
 
@@ -78,7 +81,7 @@ def enemy_window():
         if char_selected == '':
             value = f'{value} Please Select an Mod to Apply!'
         else:
-            sor_module.apply_mod(f'Sor_Mods_Storage\enemies', mod=char_selected, type='chars')
+            sor_module.apply_mod(mod_dir=path_dir, mod=char_selected, type='enemies')
             value = f'Enemy Mod {char_selected} applied!'
 
         result_label = tk.Label(result_window, text=value)
@@ -97,11 +100,12 @@ def pallete_window():
         Function that represents the window which Enemy Mods can be applied.
     :return:
     """
-    char_mods_dict = sor_module.list_char_mods(path_dir=r'Sor_Mods_Storage\palletes')
+    path_dir = r'Sor_Mods_Storage\palletes'
+    char_mods_dict = sor_module.list_char_mods(path_dir=path_dir)
 
     # Loading Images to screen
     palletes = tk.Toplevel()
-    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/Photo_PlaceHolder_Axel_By_Daniel2221.png'))
+    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/axel_daniel2221.png'))
     imgRandom_label = tk.Label(palletes, image=mainTitleImg)
     title = tk.Label(palletes, text="Pallete Mods")
 
@@ -115,7 +119,7 @@ def pallete_window():
         if pallete_selected == '':
             value = f'{value} Please Select an Pallete to Apply!'
         else:
-            sor_module.apply_mod(f'Sor_Mods_Storage\enemies', mod=pallete_selected, type='chars')
+            sor_module.apply_mod(mod_dir=path_dir, mod=pallete_selected, type='palletes')
             value = f'Enemy Mod {pallete_selected} applied!'
 
         result_label = tk.Label(result_window, text=value)
@@ -134,11 +138,12 @@ def stage_window():
         Function that represents the window which Stage Mods can be applied.
     :return:
     """
-    stage_mods_dict = sor_module.list_char_mods(path_dir=r'Sor_Mods_Storage\stages')
+    path_dir = r'Sor_Mods_Storage\stages'
+    stage_mods_dict = sor_module.list_char_mods(path_dir=path_dir)
 
     # Loading Images to screen
     stages = tk.Toplevel()
-    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/Photo_PlaceHolder_Axel_By_Daniel2221.png'))
+    mainTitleImg = ImageTk.PhotoImage(Image.open(r'img/axel_daniel2221.png'))
     imgRandom_label = tk.Label(stages, image=mainTitleImg)
     title = tk.Label(stages, text="Stage Mods")
 
@@ -152,7 +157,7 @@ def stage_window():
         if stage_selected == '':
             value = f'{value} Please Select an Stage Mod to Apply!'
         else:
-            sor_module.apply_mod(f'Sor_Mods_Storage\stages', mod=stage_selected, type='chars')
+            sor_module.apply_mod(mod_dir=path_dir, mod=stage_selected, type='stages')
             value = f'Enemy Mod {stage_selected} applied!'
 
         result_label = tk.Label(result_window, text=value)

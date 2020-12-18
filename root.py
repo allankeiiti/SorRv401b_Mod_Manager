@@ -35,8 +35,8 @@ music_btn = tk.Button(root, command=sor_module.play_music, image=musicImg)
 menu_frame = tk.LabelFrame(root, text='Mod Options', padx=10, pady=10)
 char_btn = tk.Button(menu_frame, text='Char Mods', command=frontend_module.chars_window)
 enemy_btn = tk.Button(menu_frame, text='Enemy Mods', command=frontend_module.enemy_window)
-palette_btn = tk.Button(menu_frame, text='Palettes')
-stage_btn = tk.Button(menu_frame, text='Stage Mods')
+palette_btn = tk.Button(menu_frame, text='Palettes', command=frontend_module.pallete_window)
+stage_btn = tk.Button(menu_frame, text='Stage Mods', command=frontend_module.stage_window)
 credits_btn = tk.Button(menu_frame, text='Credits', command=frontend_module.credits_window)
 
 # Exit
